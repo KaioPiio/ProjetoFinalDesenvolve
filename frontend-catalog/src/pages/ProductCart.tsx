@@ -1,49 +1,40 @@
 import { useCart } from "../context/CartContext";
-import "../styles/Cart.css";
-
+import "../styles/ProductCart.css";
 
 function ProductCart() {
-  const { cartItems, removeFromCart, clearCart } = useCart() as any;
+  const { cart, removeFromCart } = useCart();
 
- if (!cartItems || cartItems.length === 0) {
-  return (
-    <div className="empty-cart">
-      <p>Seu carrinho está vazio</p>
-    </div>
-  );
-}
-
-  const total = cartItems.reduce((acc: number, item: any) => acc + item.price * item.quantity, 0);
+  if (cart.length === 0) {
+    return <p className="empty-cart">Seu carrinho está vazio.</p>;
+  }
 
   return (
-    <div className="cart-page">
-      <h2>Carrinho de Compras</h2>
-      {cartItems.map((item: any) => (
+    <div className="cart-container">
+      <h2>🛒 Seu Carrinho</h2>
+      {cart.map(item => (
         <div key={item.id} className="cart-item">
-          {/* Imagem do produto */}
-          <img src={item.image} alt={item.title} />
-
-          {/* Detalhes do produto */}
-          <div className="details">
-            <p><strong>{item.title}</strong></p>
+          <img src={item.image} alt={item.title} className="cart-img" />
+          <div className="cart-info">
+            <h4>{item.title}</h4>
             <p>Quantidade: {item.quantity}</p>
-            <p>Preço unitário: R$ {item.price.toFixed(2)}</p>
-            <p>Total: R$ {(item.price * item.quantity).toFixed(2)}</p>
+            <p>Preço unitário: ${item.price}</p>
+            <p>
+              <strong>Total:</strong> ${(item.price * item.quantity).toFixed(2)}
+            </p>
           </div>
-
-          {/* Ações */}
-          <div className="actions">
-            <button className="remove-btn" onClick={() => removeFromCart(item.id)}>Remover</button>
-          </div>
+          <button
+            onClick={() => removeFromCart(item.id)}
+            className="remove-btn"
+          >
+            Remover
+          </button>
         </div>
       ))}
 
-      {/* Resumo do carrinho */}
-      <div className="cart-summary">
-        <h3>Valor total: R$ {total.toFixed(2)}</h3>
-        <button className="clear" onClick={clearCart}>Limpar Carrinho</button>
-        <button className="checkout">Finalizar Compra</button>
-      </div>
+      <h3 className="cart-total">
+        Total da compra: $
+        {cart.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)}
+      </h3>
     </div>
   );
 }

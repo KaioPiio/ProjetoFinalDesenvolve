@@ -68,3 +68,10 @@
 .logout-btn:hover {
   background: #b02a37;
 }
+
+.logo-img {
+  height: 100px !important; /* força o tamanho */
+  width: auto !important;
+  max-width: 100px !important;
+  object-fit: contain;
+}
